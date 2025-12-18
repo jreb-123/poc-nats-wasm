@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nats-producer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nats-producer
+  template:
+    metadata:
+      labels:
+        app: nats-producer
+    spec:
+      containers:
+      - name: producer
+        image: jrebebaza01/nats-producer:latest
+        env:
+        - name: NATS_URL
+          value: nats://nats.nats.svc.cluster.local:4222

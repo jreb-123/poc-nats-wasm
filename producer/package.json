@@ -1,0 +1,9 @@
+{
+    "name": "nats-producer",
+    "version": "1.0.0",
+    "main": "app.js",
+    "dependencies": {
+      "nats": "^2.18.0"
+    }
+  }
+  

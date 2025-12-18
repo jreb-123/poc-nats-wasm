@@ -1,0 +1,26 @@
+trigger:
+- main
+
+pool:
+  name: Default   # tu agente self-hosted
+
+variables:
+  dockerHubUser: jrebaza01
+  imageName: nats-producer
+
+steps:
+
+- checkout: self
+
+- script: |
+    docker build -t $(dockerHubUser)/$(imageName):latest producer
+  displayName: Build Docker image
+
+- script: |
+    echo "$(DOCKERHUB_PASSWORD)" | docker login -u $(dockerHubUser) --password-stdin
+    docker push $(dockerHubUser)/$(imageName):latest
+  displayName: Push image to Docker Hub
+
+- script: |
+    kubectl apply -f k8s/producer-deployment.yaml
+  displayName: Deploy to k3s
