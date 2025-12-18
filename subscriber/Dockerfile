@@ -1,6 +1,6 @@
 FROM python:3.11-slim
 
-# Instalar dependencias del sistema
+# Dependencias del sistema
 RUN apt update && apt install -y \
     curl \
     clang \
@@ -13,16 +13,17 @@ RUN curl -sSf https://raw.githubusercontent.com/WasmEdge/WasmEdge/master/utils/i
 
 WORKDIR /app
 
-# Copiar WASM source
-COPY wasm/processor.c /app/processor.c
+# Copiar WASM source (desde el contexto)
+COPY processor.c .
 
-# Compilar C → WASM
+# Compilar WASM
 RUN clang --target=wasm32-wasi processor.c -o wasm_processor.wasm
 
 # Python deps
-COPY subscriber/requirements.txt .
+COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY subscriber/subscriber.py .
+# Código del subscriber
+COPY subscriber.py .
 
 CMD ["python", "subscriber.py"]
