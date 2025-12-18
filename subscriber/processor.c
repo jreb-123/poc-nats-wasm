@@ -1,7 +1,6 @@
 #include <stdio.h>
 
-__attribute__((export_name("process")))
-int process() {
-    printf("WASM processed message\n");
+int main() {
+    printf("Hello from WASI\\n");
     return 0;
 }

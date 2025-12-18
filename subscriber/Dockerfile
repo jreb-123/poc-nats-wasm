@@ -1,36 +1,47 @@
-FROM python:3.11-slim
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
 
 # ===============================
-# Dependencias del sistema (TODAS)
+# Paquetes base
 # ===============================
-RUN apt update && apt install -y \
+RUN apt-get update && apt-get install -y \
     curl \
+    wget \
     git \
-    clang \
-    lld \
-    wasi-libc \
     ca-certificates \
+    build-essential \
+    python3 \
+    python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
 # ===============================
-# Instalar WasmEdge
+# Instalar WASI-SDK
 # ===============================
-RUN curl -sSf https://raw.githubusercontent.com/WasmEdge/WasmEdge/master/utils/install.sh | bash
+WORKDIR /opt
 
+RUN wget https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-20/wasi-sdk-20.0-linux.tar.gz && \
+    tar xvf wasi-sdk-20.0-linux.tar.gz && \
+    rm wasi-sdk-20.0-linux.tar.gz
+
+ENV WASI_SDK_PATH=/opt/wasi-sdk-20.0
+ENV PATH="${WASI_SDK_PATH}/bin:${PATH}"
+
+# ===============================
+# App
+# ===============================
 WORKDIR /app
 
-# ===============================
-# Compilar WASM
-# ===============================
 COPY processor.c .
-RUN clang --target=wasm32-wasi processor.c -o wasm_processor.wasm
 
 # ===============================
-# Python
+# Compilar a WASM
 # ===============================
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN clang \
+    --target=wasm32-wasi \
+    --sysroot=${WASI_SDK_PATH}/share/wasi-sysroot \
+    processor.c \
+    -o wasm_processor.wasm
 
-COPY subscriber.py .
+CMD ["ls", "-lh", "wasm_processor.wasm"]
 
-CMD ["python", "subscriber.py"]
