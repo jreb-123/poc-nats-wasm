@@ -24,3 +24,16 @@ steps:
 - script: |
     kubectl apply -f k8s/producer-deployment.yaml
   displayName: Deploy to k3s
+
+- script: |
+    docker build -t jrebaza01/nats-subscriber:latest subscriber
+  displayName: Build Subscriber
+
+- script: |
+    docker push jrebaza01/nats-subscriber:latest
+  displayName: Push Subscriber
+
+- script: |
+    kubectl apply -f k8s/subscriber-deployment.yaml
+  displayName: Deploy Subscriber
+
