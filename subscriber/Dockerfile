@@ -1,27 +1,16 @@
-FROM ubuntu:22.04
-
-ENV DEBIAN_FRONTEND=noninteractive
+FROM wasmedge/wasmedge:0.13.5
 
 # ===============================
-# Paquetes base
+# Dependencias de compilación
 # ===============================
 RUN apt-get update && apt-get install -y \
-    curl \
+    clang \
     wget \
-    git \
     ca-certificates \
-    build-essential \
     && rm -rf /var/lib/apt/lists/*
 
 # ===============================
-# Instalar WasmEdge
-# ===============================
-RUN curl -sSf https://raw.githubusercontent.com/WasmEdge/WasmEdge/master/utils/install.sh | bash
-
-ENV PATH="/root/.wasmedge/bin:${PATH}"
-
-# ===============================
-# Instalar WASI-SDK
+# Instalar WASI-SDK (FIJO)
 # ===============================
 WORKDIR /opt
 
@@ -49,5 +38,3 @@ RUN clang \
 # Ejecutar WASM
 # ===============================
 CMD ["wasmedge", "wasm_processor.wasm"]
-
-
