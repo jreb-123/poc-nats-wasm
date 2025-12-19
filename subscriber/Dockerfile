@@ -1,4 +1,4 @@
-FROM wasmedge/wasmedge:0.13.5
+FROM wasmedge/wasmedge:0.13.5-ubuntu
 
 # ===============================
 # Dependencias de compilación
