@@ -2,24 +2,42 @@ trigger:
 - main
 
 pool:
-  name: Default
+  name: Default   # tu self-hosted agent
 
 variables:
-  imageName: nats-producer
-  dockerRepo: jrebaza01/nats-producer
-  dockerTag: latest
+  DOCKERHUB_USER: jrebaza01
 
-steps:
-- checkout: self
+stages:
+- stage: Build
+  displayName: Build & Push Images
+  jobs:
+  - job: Build
+    steps:
+    - script: |
+        echo "Login DockerHub"
+        echo "$DOCKERHUB_PASSWORD" | docker login -u $(DOCKERHUB_USER) --password-stdin
+      displayName: Docker login
 
-- task: Docker@2
-  displayName: Build and push image
-  inputs:
-    command: buildAndPush
-    repository: $(dockerRepo)
-    dockerfile: producer/Dockerfile
-    containerRegistry: dockerhub-jrebaza01
-    tags: |
-      $(dockerTag)
+    - script: |
+        docker build -t $(DOCKERHUB_USER)/nats-producer:latest producer
+        docker push $(DOCKERHUB_USER)/nats-producer:latest
+      displayName: Build & push producer
+
+    - script: |
+        docker build -t $(DOCKERHUB_USER)/nats-subscriber:latest subscriber
+        docker push $(DOCKERHUB_USER)/nats-subscriber:latest
+      displayName: Build & push subscriber
+
+- stage: Deploy
+  displayName: Deploy to K3s
+  dependsOn: Build
+  jobs:
+  - job: Deploy
+    steps:
+    - script: |
+        kubectl apply -f k8s/nats.yaml
+        kubectl apply -f k8s/producer.yaml
+        kubectl apply -f k8s/subscriber-job.yaml
+      displayName: Deploy workloads
 
 
