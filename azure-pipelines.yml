@@ -13,10 +13,20 @@ stages:
   jobs:
   - job: Build
     steps:
-    - script: |
-        echo "Login DockerHub"
-        echo "$DOCKERHUB_PASSWORD" | docker login -u $(DOCKERHUB_USER) --password-stdin
+    # Opción 1: Usar Service Connection (recomendado)
+    - task: Docker@2
       displayName: Docker login
+      inputs:
+        command: login
+        containerRegistry: dockerhub-jrebaza01
+    
+    # Opción 2: Usar variables (comentado - descomenta si prefieres esta opción)
+    # - script: |
+    #     echo "Login DockerHub"
+    #     echo "$(DOCKERHUB_PASSWORD)" | docker login -u $(DOCKERHUB_USER) --password-stdin
+    #   displayName: Docker login
+    #   env:
+    #     DOCKERHUB_PASSWORD: $(DOCKERHUB_PASSWORD)
 
     - script: |
         docker build -t $(DOCKERHUB_USER)/nats-producer:latest producer
