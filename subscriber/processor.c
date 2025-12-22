@@ -1,6 +1,6 @@
 #include <stdio.h>
 
 int main() {
-    printf("Hello from WASI\\n");
+    printf("WASM subscriber started OK\n");
     return 0;
 }
