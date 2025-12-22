@@ -16,8 +16,11 @@ stages:
     steps:
 
     - script: |
-        docker login -u $(DOCKERHUB_USER) -p $(DOCKERHUB_PASSWORD)
+        echo "$DOCKERHUB_PASSWORD" | docker login -u $(DOCKERHUB_USER) --password-stdin
+      env:
+       DOCKERHUB_PASSWORD: $(DOCKERHUB_PASSWORD)
       displayName: Docker login
+
 
     - script: |
         docker build -t $(DOCKERHUB_USER)/$(PRODUCER_IMAGE):latest producer
