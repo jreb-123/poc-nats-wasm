@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: subscriber
-          image: jrebaza01/nats-subscriber:latest
+          image: jrebaza01/nats-subscriber:51
           imagePullPolicy: Always
           resources:
             requests:

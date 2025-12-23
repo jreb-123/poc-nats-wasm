@@ -35,10 +35,12 @@ stages:
         docker push $(DOCKERHUB_USER)/nats-producer:$(IMAGE_TAG)
       displayName: Build & push producer
 
-
     - script: |
-        docker build -t $(DOCKERHUB_USER)/nats-subscriber:latest subscriber
+        docker build -t $(DOCKERHUB_USER)/nats-subscriber:$(IMAGE_TAG) .
+        docker tag $(DOCKERHUB_USER)/nats-subscriber:$(IMAGE_TAG) $(DOCKERHUB_USER)/nats-subscriber:latest
         docker push $(DOCKERHUB_USER)/nats-subscriber:$(IMAGE_TAG)
+        docker push $(DOCKERHUB_USER)/nats-subscriber:latest
+      workingDirectory: subscriber
       displayName: Build & push subscriber
 
 - stage: Deploy
