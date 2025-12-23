@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: producer
-        image: jrebaza01/nats-producer:IMAGE_TAG
+        image: jrebaza01/nats-producer:__IMAGE_TAG__
         imagePullPolicy: IfNotPresent
         env:
         - name: NATS_URL
