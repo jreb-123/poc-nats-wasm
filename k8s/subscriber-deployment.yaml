@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nats-subscriber
+  labels:
+    app: nats-subscriber
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: nats-subscriber
+  template:
+    metadata:
+      labels:
+        app: nats-subscriber
+    spec:
+      containers:
+        - name: subscriber
+          image: jrebaza01/nats-subscriber:latest
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "64Mi"
+            limits:
+              cpu: "500m"
+              memory: "128Mi"

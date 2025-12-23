@@ -48,9 +48,7 @@ stages:
   - job: Deploy
     steps:
     - script: |
-        sed -i "s|IMAGE_TAG|$(IMAGE_TAG)|g" k8s/*.yaml
         kubectl apply -f k8s/producer-deployment.yaml
-        kubectl delete job nats-subscriber --ignore-not-found
-        kubectl apply -f k8s/subscriber-job.yaml
+        kubectl apply -f k8s/subscriber-deployment.yaml
       displayName: Deploy workloads
 
