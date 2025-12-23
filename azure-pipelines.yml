@@ -48,7 +48,6 @@ stages:
   - job: Deploy
     steps:
     - script: |
-        kubectl apply -f k8s/nats.yaml
         kubectl apply -f k8s/producer-deployment.yaml
         kubectl apply -f k8s/subscriber-job.yaml
       displayName: Deploy workloads
