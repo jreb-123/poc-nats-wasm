@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
       - name: producer
-        image: jrebaza01/nats-producer:latest
+        image: jrebaza01/nats-producer:IMAGE_TAG
+        imagePullPolicy: IfNotPresent
         env:
         - name: NATS_URL
           value: nats://nats.nats.svc.cluster.local:4222

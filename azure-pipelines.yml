@@ -6,6 +6,8 @@ pool:
 
 variables:
   DOCKERHUB_USER: jrebaza01
+  IMAGE_TAG: $(Build.BuildId)
+
 
 stages:
 - stage: Build
@@ -29,9 +31,10 @@ stages:
     #     DOCKERHUB_PASSWORD: $(DOCKERHUB_PASSWORD)
 
     - script: |
-        docker build -t $(DOCKERHUB_USER)/nats-producer:latest producer
-        docker push $(DOCKERHUB_USER)/nats-producer:latest
+        docker build -t $(DOCKERHUB_USER)/nats-producer:$(IMAGE_TAG) producer
+        docker push $(DOCKERHUB_USER)/nats-producer:$(IMAGE_TAG)
       displayName: Build & push producer
+
 
     - script: |
         docker build -t $(DOCKERHUB_USER)/nats-subscriber:latest subscriber

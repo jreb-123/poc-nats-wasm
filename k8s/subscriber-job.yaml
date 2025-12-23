@@ -9,5 +9,5 @@ spec:
       restartPolicy: Never
       containers:
         - name: subscriber
-          image: jrebaza01/nats-subscriber:latest
+          image: jrebaza01/nats-subscriber:IMAGE_TAG
 
