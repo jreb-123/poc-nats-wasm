@@ -38,7 +38,7 @@ stages:
 
     - script: |
         docker build -t $(DOCKERHUB_USER)/nats-subscriber:latest subscriber
-        docker push $(DOCKERHUB_USER)/nats-subscriber:latest
+        docker push $(DOCKERHUB_USER)/nats-subscriber:$(IMAGE_TAG)
       displayName: Build & push subscriber
 
 - stage: Deploy
@@ -48,8 +48,9 @@ stages:
   - job: Deploy
     steps:
     - script: |
-        kubectl apply -f k8s/producer-deployment.yaml
-        kubectl apply -f k8s/subscriber-job.yaml
-      displayName: Deploy workloads
-
+      sed -i "s|IMAGE_TAG|$(IMAGE_TAG)|g" k8s/*.yaml
+      kubectl apply -f k8s/producer-deployment.yaml
+      kubectl delete job nats-subscriber --ignore-not-found
+      kubectl apply -f k8s/subscriber-job.yaml
+    displayName: Deploy workloads
 
