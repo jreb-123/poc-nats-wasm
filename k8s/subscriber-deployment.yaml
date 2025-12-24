@@ -26,3 +26,22 @@ spec:
             limits:
               cpu: "500m"
               memory: "128Mi"
+
+          livenessProbe:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - pgrep -f wasm_processor
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 3
+
+          readinessProbe:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - pgrep -f wasm_processor
+            initialDelaySeconds: 5
+            periodSeconds: 5
