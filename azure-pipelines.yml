@@ -49,16 +49,12 @@ stages:
   jobs:
   - job: Deploy
     steps:
-
-    # Producer (estático, OK por ahora)
     - script: |
+        sed -i "s|__IMAGE_TAG__|$(IMAGE_TAG)|g" k8s/producer-deployment.yaml
+        sed -i "s|__IMAGE_TAG__|$(IMAGE_TAG)|g" k8s/subscriber-deployment.yaml
+
         kubectl apply -f k8s/producer-deployment.yaml
-      displayName: Deploy producer
-
-    # Subscriber (dinámico, PRO)
-    - script: |
-        sed "s/__IMAGE_TAG__/$(IMAGE_TAG)/g" k8s/subscriber-deployment.yaml.tpl > subscriber-deployment.yaml
-        kubectl apply -f subscriber-deployment.yaml
-      displayName: Deploy subscriber with dynamic tag
+        kubectl apply -f k8s/subscriber-deployment.yaml
+      displayName: Deploy workloads with dynamic tags
 
 
