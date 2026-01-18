@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/<TU_USUARIO>/charts.git'
+    repoURL: https://github.com/jreb-123/poc-nats-wasm.git
     targetRevision: main
     path: charts/subscriber
     helm:

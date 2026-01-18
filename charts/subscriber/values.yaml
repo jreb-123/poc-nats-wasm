@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: jrebaza01/nats-subscriber
-  tag: "53"
+  tag: "54"
   pullPolicy: Always
 
 resources:
