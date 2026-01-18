@@ -1,0 +1,16 @@
+replicaCount: 1
+
+image:
+  repository: jrebaza01/nats-subscriber
+  tag: "54"  # la nueva versión canaria
+  pullPolicy: Always
+
+resources:
+  limits:
+    cpu: 250m
+    memory: 64Mi
+  requests:
+    cpu: 50m
+    memory: 32Mi
+
+# Liveness / Readiness siguen igual
